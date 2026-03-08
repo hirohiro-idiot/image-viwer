@@ -199,28 +199,32 @@ document.addEventListener("touchend", (e) => {
 }, { passive: true });
 
 applyImageMode();
+
 const fileInput = document.getElementById("fileInput");
 
 fileInput.addEventListener("change", (event) => {
+  clearViewer();
 
-clearViewer();
+  const files = Array.from(event.target.files);
 
-const files = Array.from(event.target.files);
+  imageFiles = files.filter(file =>
+    file.type.startsWith("image/")
+  );
 
-imageFiles = files.filter(file =>
-file.type.startsWith("image/")
-);
+  imageFiles.sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { numeric: true })
+  );
 
-if (imageFiles.length === 0) {
-statusText.textContent = "画像が選択されていません";
-return;
-}
+  if (imageFiles.length === 0) {
+    statusText.textContent = "画像が選択されていません";
+    return;
+  }
 
-imageURLs = imageFiles.map(file =>
-URL.createObjectURL(file)
-);
+  imageURLs = imageFiles.map(file =>
+    URL.createObjectURL(file)
+  );
 
-renderThumbnails();
-showImage(0);
-
+  renderThumbnails();
+  applyImageMode();
+  showImage(0);
 });

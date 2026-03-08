@@ -199,3 +199,28 @@ document.addEventListener("touchend", (e) => {
 }, { passive: true });
 
 applyImageMode();
+const fileInput = document.getElementById("fileInput");
+
+fileInput.addEventListener("change", (event) => {
+
+clearViewer();
+
+const files = Array.from(event.target.files);
+
+imageFiles = files.filter(file =>
+file.type.startsWith("image/")
+);
+
+if (imageFiles.length === 0) {
+statusText.textContent = "画像が選択されていません";
+return;
+}
+
+imageURLs = imageFiles.map(file =>
+URL.createObjectURL(file)
+);
+
+renderThumbnails();
+showImage(0);
+
+});
